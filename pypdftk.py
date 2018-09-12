@@ -84,7 +84,33 @@ def fill_form(pdf_path, datas={}, out_file=None, flatten=True):
     os.remove(tmp_fdf)
     return out_file
 
-def dump_data_fields(pdf_path):
+def createItemForDict(fields) :
+    d = dict()
+    for key, value in fields :
+        try:
+        # Assumes there is a list on the key
+            d[key].append(value) 
+        except KeyError: # if fails because there is no key
+            d[key] = value
+        except AttributeError: # if fails because it is not a list
+            d[key] =  [value]
+    fieldName = d['FieldName']
+    del d['FieldName']
+    return [fieldName, d]
+
+def createItemForList(fields) :
+    d = dict()
+    for key, value in fields :
+        try:
+        # Assumes there is a list on the key
+            d[key].append(value) 
+        except KeyError: # if fails because there is no key
+            d[key] = value
+        except AttributeError: # if fails because it is not a list
+            d[key] =  [value]
+    return d
+
+def dump_data_fields(pdf_path, outputDictFormat=False):
     '''
         Return list of dicts of all fields in a PDF.
     '''
@@ -95,8 +121,11 @@ def dump_data_fields(pdf_path):
     #    field_data = map(lambda x: x.split(b': ', 1), run_command(cmd, True))
     field_data = map(lambda x: x.decode("utf-8").split(': ', 1), run_command(cmd, True))
     fields = [list(group) for k, group in itertools.groupby(field_data, lambda x: len(x) == 1) if not k]
-    return [dict(f) for f in fields]
-
+    if outputDictFormat :
+        dictItems = [createItemForDict(f) for f in fields]
+        return dict(dictItems)
+    else :
+        return [createItemForList(f) for f in fields]
 def concat(files, out_file=None):
     '''
         Merge multiples PDF files.

@@ -55,6 +55,7 @@ Applies a stamp (from `stamp_pdf_path`) to the PDF file in `pdf_path`. If no `ou
 ### `dump_data_fields`
 Read PDF and output form field statistics.
  - `pdf_path` : input PDF file
+ - `outputDictFormat` (default=False): If False - Output will be a list, True -- Output will dict() with fieldName as the `key`
 
 ## Example
 
