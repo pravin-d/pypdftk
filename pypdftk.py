@@ -16,12 +16,7 @@ import itertools
 
 log = logging.getLogger(__name__)
 
-if os.getenv('PDFTK_PATH'):
-    PDFTK_PATH = os.getenv('PDFTK_PATH')
-else:
-    PDFTK_PATH = '/usr/bin/pdftk'
-    if not os.path.isfile(PDFTK_PATH):
-        PDFTK_PATH = 'pdftk'
+PDFTK_PATH = 'pdftk'
 
 
 def check_output(*popenargs, **kwargs):
